@@ -3,52 +3,41 @@
 #include <string>
 #include <vector>
 #include <clocale>
-using namespace std;
 
-class Sea {
-public:
-    Sea(string sea_title, float sea_depth, float sea_salinity) : title{sea_title}, depth{sea_depth}, salinity{sea_salinity}
-    {
+#include "sea.hpp"
+
+namespace seas {
+    Sea* getSea(std::istream &ist) {
+        std::string title;
+        float depth, salinity;
+        ist >> title >> depth >> salinity;
+        Sea *newSea = new Sea(title, depth, salinity);
+        return newSea;
     }
-    void print(ostream &ost) {
-        ost << this->title << " " << this->depth << " " << this->salinity << endl;
+
+    void print(const std::vector<Sea*> &seas) {
+        for (auto sea : seas) {
+            sea->print(std::cout);
+        }
     }
-private:
-    string title;
-    float depth;
-    float salinity;
-};
 
-Sea* getSea(std::ifstream &ist) {
-    string title;
-    float depth, salinity;
-    ist >> title >> depth >> salinity;
-    Sea *newSea = new Sea(title, depth, salinity);
-    return newSea;
-}
-
-void printSeas(const vector<Sea*> &seas) {
-    for (auto sea : seas) {
-        sea->print(std::cout);
-    }
-}
-
-void deleteSeas(vector<Sea*> &seas) {
-    for (auto i : seas) {
-        delete i;
+    void del(const std::vector<Sea*> &seas) {
+        for (auto i : seas) {
+            delete i;
+        }
     }
 }
 
 int main() {
     setlocale(LC_ALL, "rus");
-    vector<Sea*> seas;
-    ifstream ist("seas.txt");
+    std::vector<Sea*> seas;
+    std::ifstream ist("seas.txt");
     while (!ist.eof()) {
-        Sea *newSea = getSea(ist);
-        seas.push_back(newSea);
+        Sea *new_sea = seas::getSea(ist);
+        seas.push_back(new_sea);
     }
     ist.close();
-    printSeas(seas);
-    deleteSeas(seas);
+    seas::print(seas);
+    seas::del(seas);
     return 0;
 }
