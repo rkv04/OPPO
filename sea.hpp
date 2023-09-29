@@ -5,8 +5,8 @@
 
 class Sea {
 public:
-    Sea(std::string sea_title, float sea_depth, float sea_salinity);
     void print(std::ostream &ost);
+    void loadFromStream(std::istream &ist);
 private:
     std::string title;
     float depth;

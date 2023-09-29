@@ -7,14 +7,6 @@
 #include "sea.hpp"
 
 namespace seas {
-    Sea* getSea(std::istream &ist) {
-        std::string title;
-        float depth, salinity;
-        ist >> title >> depth >> salinity;
-        Sea *newSea = new Sea(title, depth, salinity);
-        return newSea;
-    }
-
     void print(const std::vector<Sea*> &seas) {
         for (auto sea : seas) {
             sea->print(std::cout);
@@ -33,7 +25,8 @@ int main() {
     std::vector<Sea*> seas;
     std::ifstream ist("seas.txt");
     while (!ist.eof()) {
-        Sea *new_sea = seas::getSea(ist);
+        Sea *new_sea = new Sea();
+        new_sea->loadFromStream(ist);
         seas.push_back(new_sea);
     }
     ist.close();
