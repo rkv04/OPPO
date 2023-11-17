@@ -67,10 +67,20 @@ BOOST_AUTO_TEST_CASE(test_validate_function_on_valid_data) {
 }
 
 BOOST_AUTO_TEST_CASE(test_validate_function_on_invalid_data) {
-	BOOST_CHECK_THROW(Sea::validateData("Средиземное море", 5109, 3.8), std::runtime_error);
-	BOOST_CHECK_THROW(Sea::validateData("Средиземное море", 5109, -0.38), std::runtime_error);
-	BOOST_CHECK_THROW(Sea::validateData("Средиземное море", -5109, 0.38), std::runtime_error);
-	BOOST_CHECK_THROW(Sea::validateData("Средиз2мное море", 5109, 0.38), std::runtime_error);
+	struct TestContext {
+		std::string name;
+		float depth;
+		float salinity;
+	};
+	std::vector<TestContext> invalid_data_cases{
+		{"Средиземное море", 5109, 3.8},
+		{"Средиземное море", 5109, -0.38},
+		{"Средиземное море", -5109, 0.38},
+		{"Средиз2мное море", 5109, 0.38}
+	};
+	for (auto i : invalid_data_cases) {
+		BOOST_CHECK_THROW(Sea::validateData(i.name, i.depth, i.salinity), std::runtime_error);
+	}
 }
 
 BOOST_AUTO_TEST_CASE(test_constructor_on_valid_data) {
@@ -91,6 +101,39 @@ BOOST_AUTO_TEST_CASE(test_constructor_on_invalid_data) {
 	};
 	for (auto i : invalid_data_set) {
 		BOOST_CHECK_THROW(Sea sea(i), std::runtime_error);
+	}
+}
+
+BOOST_AUTO_TEST_SUITE_END()
+
+
+BOOST_AUTO_TEST_SUITE(TestFishClass)
+
+BOOST_AUTO_TEST_CASE(test_validate_function_on_valid_data) {
+	const std::vector<std::string> valid_data_cases = {"скумбрия", "mackerel fish"};
+	for (auto i : valid_data_cases) {
+		BOOST_CHECK_NO_THROW(Fish::validateTitle(i));
+	}
+}
+
+BOOST_AUTO_TEST_CASE(test_validate_function_on_invalid_data) {
+	const std::vector<std::string> valid_data_cases = {"ск2умбрия", "ma(ckerel fish"};
+	for (auto i : valid_data_cases) {
+		BOOST_CHECK_THROW(Fish::validateTitle(i), std::runtime_error);
+	}
+}
+
+BOOST_AUTO_TEST_CASE(test_constructor_on_valid_data) {
+	const std::vector<std::string> valid_data_cases = {"скумбрия", "mackerel fish"};
+	for (auto i : valid_data_cases) {
+		BOOST_CHECK_NO_THROW(Fish fish(i));
+	}
+}
+
+BOOST_AUTO_TEST_CASE(test_constructor_on_invalid_data) {
+	const std::vector<std::string> valid_data_cases = {"ск2умбрия", "ma(ckerel fish"};
+	for (auto i : valid_data_cases) {
+		BOOST_CHECK_THROW(Fish fish(i), std::runtime_error);
 	}
 }
 

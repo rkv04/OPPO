@@ -9,16 +9,15 @@
 
 Sea::Sea(const std::vector<std::string> &data) {
     if (data.size() < 3) throw std::runtime_error("Too few values");
-    std::string title = data.at(0);
-    float depth = strToFloat(data.at(1));
-    float salinity = strToFloat(data.at(2));
+    std::vector<std::string>::const_iterator iter = data.begin();
+    std::string title = *iter;
+    float depth = strToFloat(*(iter+=1));
+    float salinity = strToFloat(*(iter+=1));
     Sea::validateData(title, depth, salinity);
     this->title = title;
     this->depth = depth;
     this->salinity = salinity;
-    for (size_t i = 3; i < data.size(); i++) {
-        this->fish.push_back(new Fish(data.at(i)));
-    }
+    this->fish = Fish::createFishes(iter+=1, data.end());
 }
 
 Sea::~Sea() {
@@ -29,7 +28,7 @@ Sea::~Sea() {
 
 void Sea::validateTitle(const std::string title) {
     for (char c : title) {
-        if (RUS_ALPH.find(c) == std::string::npos && !isalpha(c) && c != ' ' && c != '-') throw std::runtime_error("Invalid title");
+        if (RUS_ALPH.find(c) == std::string::npos && !isalpha(c) && c != ' ' && c != '-') throw std::runtime_error("Invalid sea title");
     }
 }
 
@@ -54,7 +53,3 @@ void Sea::print(std::ostream &ost) {
     }
     ost << std::endl;
 }
-
-// Fish* Sea::getFish() {
-//     return this->fish;
-// }
