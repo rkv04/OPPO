@@ -28,7 +28,7 @@ namespace seas {
 
     void readFromFile(std::istream &ist, std::vector<Sea*> &seas) {
         size_t num_line = 0;
-        while (!ist.eof()) {
+        while (!ist.eof() && !ist.fail()) {
             num_line += 1;
             std::string line;
             getline(ist, line);
@@ -51,7 +51,7 @@ namespace seas {
 int main() {
     setlocale(LC_ALL, "rus");
     std::vector<Sea*> seas;
-    std::ifstream ist("seas.txt");
+    std::ifstream ist("./seas.txt");
     if (!ist.is_open()) {
         std::cout << "--file opening error--" << std::endl;
         return -1;

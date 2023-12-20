@@ -11,7 +11,6 @@ public:
     Sea(const std::vector<std::string> &data);
     ~Sea();
     void print(std::ostream &ost);
-    Fish* getFish();
     static void validateData(const std::string title, const float depth, const float salinity);
     static void validateTitle(const std::string title);
     static void validateDepth(const float depth);
